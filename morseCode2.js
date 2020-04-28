@@ -5,12 +5,16 @@ let decodeBits = function(bits){
     //Determinar cual es la menor unidad para punto y espacio
     //parece que se define en la relacion entre los primeros dos caracteres
     //leer secuencia de caracteres y reemplazar:
-    //".... . -.--   .--- ..- -.. ."
-    //11--->punto de letra
-    //111111--->barra de letra
-    //00--->espacio entre puntos y barra en la letra    
-    //000000--->espacio entre letras en la palabra
-    //00000000000000 ----> espacio entre palabras
+    // "Dot" – is 1 time unit long.
+    // "Dash" – is 3 time units long.
+    // Pause between dots and dashes in a character – is 1 time unit long.
+    // Pause between characters inside a word – is 3 time units long.
+    // Pause between words – is 7 time units long.
+    
+    // 111   .
+    // 1111111100
+
+    //Dividir por el menor valor de los tres primeros
     
     let arr = bits.split('')
     if(arr[0]!=="1"){
@@ -19,15 +23,45 @@ let decodeBits = function(bits){
     }else if(arr[arr.length-1]!=="1"){
         arr.pop()
     }
-    let total1 = 0;
-    let total0 = 0;
+
+    
+    let newArr = arr;
+    let result = arr.reduce(function(r, i) {
+        if (typeof r.last === 'undefined' || r.last !== i) {
+            r.last = i;
+            r.arr.push([]);
+        }
+        r.arr[r.arr.length - 1].push(i);
+        return r;
+    }, {arr: []}).arr;
+
+    
+    for(let a of result){
+
+    }
+
+    let [primCar,segCar,terCar] = result
+    let totCar = [primCar.length, segCar.length, terCar.length]
+    let menor = Math.min(...totCar)
+
     let string = [];
 
-    arr.reduce((valAnterior,valActual)=>{
-        //aca tengo que definir la relacion
-        if(valActual === "1"){
-            total1+= 1;
-            switch(total0){
+    result.reduce((valAnterior,valActual)=>{
+
+        if(valActual[0] === "1"){
+ 
+            switch(valActual.length / menor){
+                case 1:
+                    string.push(".");
+                    total1 = 0;
+                break;
+                case 3:
+                    string.push("-");
+                    total1 = 0;
+                break;
+            }
+        }else{
+            switch(valActual.length / menor){
                 case 1:
                     string.push("");
                     total0 = 0;
@@ -41,32 +75,9 @@ let decodeBits = function(bits){
                     total0 = 0;
                 break;
             }
-        }else{
-            switch(total1){
-                case 1:
-                    string.push(".");
-                    total1 = 0;
-                break;
-                case 3:
-                    string.push("-");
-                    total1 = 0;
-                break;
-            }
-            total0+=1;
-
         }
         return 
     },"1")
-    switch(total1){
-        case 1:
-            string.push(".");
-            total1 = 0;
-        break;
-        case 3:
-            string.push("-");
-            total1 = 0;
-        break;
-    }
     
     return string.join('')
 }
@@ -120,9 +131,9 @@ decodeMorse = function(morseCode){
     return decodificado.join(" ")
 }
 
-let bits = '10111';
+let bits = '111';
 
-console.log(decodeBits(bits))
+// console.log(decodeBits(bits))
 console.log(decodeMorse(decodeBits(bits)))
 
 //console.log(decodeBits('1100110011001100000011000000111111001100111111001111110000000000000011001111110011111100111111000000110011001111110000001111110011001100000011'))
