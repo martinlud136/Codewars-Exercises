@@ -32,16 +32,21 @@ let decodeBits = function(bits){
     for(let a of result){
         totalength.push(a.length);
     }
-    let menor = Math.min(...totalength)
-
     //eliminar los ceros de los extremos
- 
+
     if(result[0][0] !=="1"){
-        result[0][0].shift()
-        result[result.length-1][0] !== "1"? result[result.length-1][0].pop(): null;
+        result.shift()
+        totalength.shift()
+        if(result[result.length-1][0] !== "1"){
+            result.pop()
+            totalength.pop()
+        };
     }else if(result[result.length-1][0] !=="1"){
-        result[result.length-1][0].pop()
+        result.pop()
+        totalength.pop()
     }
+
+    let menor = Math.min(...totalength)
 
     let string = [];
 
@@ -130,7 +135,7 @@ decodeMorse = function(morseCode){
     return decodificado.join(" ")
 }
 
-let bits = '1111111';
+let bits = '01110';
 
 // console.log(decodeBits(bits))
 console.log(decodeMorse(decodeBits(bits)))
