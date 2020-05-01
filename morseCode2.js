@@ -33,7 +33,7 @@ let decodeBits = function(bits){
         totalength.push(a.length);
     }
     //eliminar los ceros de los extremos
-
+    console.log(result)
     if(result[0][0] !=="1"){
         result.shift()
         totalength.shift()
@@ -45,7 +45,7 @@ let decodeBits = function(bits){
         result.pop()
         totalength.pop()
     }
-
+    console.log(result)
     let menor = Math.min(...totalength)
 
     let string = [];
@@ -135,7 +135,7 @@ decodeMorse = function(morseCode){
     return decodificado.join(" ")
 }
 
-let bits = '01110';
+let bits = '0000000011011010011100000110000001111110100111110011111100000000000111011111111011111011111000000101100011111100000111110011101100000100000';
 
 // console.log(decodeBits(bits))
 console.log(decodeMorse(decodeBits(bits)))
